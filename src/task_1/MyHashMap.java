@@ -8,34 +8,73 @@ import java.util.Set;
  * Created by Алексей on 05.04.2017.
  */
 public class MyHashMap<K, V> implements Map<K, V> {
+    private MyEntry<K, V>[] array;
+
+    private void resize(MyEntry<K, V>[] array){
+        int size = array.length;
+        for(int i=0;i<size;i++){
+            if(array[i] == null){
+                for(int j = i;j<size - 1;j++){
+                    array[j] = array[j+1];
+                }
+                size--;
+                i--;
+            }
+        }
+    }
+
+
     @Override
     public int size() {
-        return 0;
+        return array.length;
     }
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return array.length == 0;
     }
 
     @Override
     public boolean containsKey(Object key) {
+        for (MyEntry<K, V> entry: array) {
+            if(entry.getKey() == (K) key)
+                return true;
+        }
         return false;
     }
 
     @Override
     public boolean containsValue(Object value) {
+        for (MyEntry<K, V> entry: array) {
+            if(entry.getValue() == (V) value)
+                return true;
+        }
         return false;
     }
 
     @Override
     public V get(Object key) {
+        for(MyEntry<K, V> entry : array){
+            if(entry.getKey() == (K) key)
+                return entry.getValue();
+        }
         return null;
     }
 
     @Override
     public V put(K key, V value) {
-        return null;
+        for(MyEntry<K, V> entry : array){
+            if(entry.getKey() == (K) key)
+            {
+                entry.setValue(value);
+                return value;
+            }
+        }
+        MyEntry<K, V>[] array = new MyEntry[this.array.length+1];
+        for(int i=0;i<this.array.length;i++)
+            array[i] = this.array[i];
+        this.array = array;
+        return value;
     }
 
     @Override

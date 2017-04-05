@@ -3,10 +3,10 @@ package task_1;
 /**
  * Created by Алексей on 05.04.2017.
  */
-public class Entry<K, V> {
+public class MyEntry<K, V> {
     private final K key;
     private V value;
-    public Entry(K key, V value){
+    public MyEntry(K key, V value){
         this.key = key;
         this.value = value;
     }
@@ -16,4 +16,9 @@ public class Entry<K, V> {
     public V getValue(){
         return this.value;
     }
+    public V setValue(V value){
+        this.value = value;
+        return this.value;
+    }
+
 }
