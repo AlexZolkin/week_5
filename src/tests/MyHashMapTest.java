@@ -75,10 +75,19 @@ public class MyHashMapTest {
     }
     @Test
     public void testEntrySet(){
+        boolean flag = true;
         Set<Map.Entry<String, Integer>> set = new HashSet<>();
         for(int i=0, j=15;i<15 && j > 0;i++, j--){
             set.add(new MyEntry<String, Integer>(Integer.toString(j), i));
         }
-        Assert.assertEquals(true, hashMap.entrySet().containsAll(set));
+        Iterator<Map.Entry<String, Integer>> iter = set.iterator();
+        for(;iter.hasNext();){
+            Map.Entry<String, Integer> cur = iter.next();
+            if(!(hashMap.containsKey(cur.getKey())
+                    && hashMap.containsValue(cur.getValue()))){
+                flag = false;
+            }
+        }
+        Assert.assertEquals(true, flag);
     }
 }
