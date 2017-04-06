@@ -1,8 +1,6 @@
 package task_1;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by Алексей on 05.04.2017.
@@ -73,37 +71,58 @@ public class MyHashMap<K, V> implements Map<K, V> {
         MyEntry<K, V>[] array = new MyEntry[this.array.length+1];
         for(int i=0;i<this.array.length;i++)
             array[i] = this.array[i];
+        array[array.length - 1] = new MyEntry<K, V>(key, value);
         this.array = array;
         return value;
     }
 
     @Override
     public V remove(Object key) {
+        for(MyEntry<K, V> entry: this.array){
+            if(entry.getKey() == (K) key){
+                V value = entry.getValue();
+                entry = null;
+                resize(this.array);
+                return value;
+            }
+        }
         return null;
     }
 
     @Override
     public void putAll(Map<? extends K, ? extends V> m) {
-
+        for(Map.Entry entry : m.entrySet()){
+            put((K)entry.getKey(), (V)entry.getValue());
+        }
     }
 
     @Override
     public void clear() {
-
+        array = null;
     }
 
     @Override
     public Set<K> keySet() {
-        return null;
+        Set<K> set = new HashSet<K>();
+        for(MyEntry<K, V> entry : array)
+            set.add(entry.getKey());
+        return set;
     }
 
     @Override
     public Collection<V> values() {
-        return null;
+        Collection<V> col = new ArrayList<V>();
+        for(MyEntry<K, V> entry : array)
+            col.add(entry.getValue());
+        return col;
     }
 
     @Override
     public Set<Entry<K, V>> entrySet() {
-        return null;
+        Set<Entry<K, V>> set = new HashSet<>();
+        for(MyEntry<K, V> entry : array){
+            set.add(entry);
+        }
+        return set;
     }
 }
