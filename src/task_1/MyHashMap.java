@@ -8,6 +8,10 @@ import java.util.*;
 public class MyHashMap<K, V> implements Map<K, V> {
     private MyEntry<K, V>[] array;
 
+    public MyHashMap(){
+        this.array = new MyEntry[0];
+    }
+
     private void resize(MyEntry<K, V>[] array){
         int size = array.length;
         for(int i=0;i<size;i++){
@@ -24,18 +28,22 @@ public class MyHashMap<K, V> implements Map<K, V> {
 
     @Override
     public int size() {
-        return array.length;
+        if(array != null)
+            return array.length;
+        return 0;
     }
 
     @Override
     public boolean isEmpty() {
-        return array.length == 0;
+        if(array != null)
+            return array.length == 0;
+        return true;
     }
 
     @Override
     public boolean containsKey(Object key) {
         for (MyEntry<K, V> entry: array) {
-            if(entry.getKey() == (K) key)
+            if(entry.getKey().equals((K) key))
                 return true;
         }
         return false;
@@ -44,8 +52,9 @@ public class MyHashMap<K, V> implements Map<K, V> {
     @Override
     public boolean containsValue(Object value) {
         for (MyEntry<K, V> entry: array) {
-            if(entry.getValue() == (V) value)
-                return true;
+            if(entry != null)
+                if(entry.getValue().equals((V) value))
+                    return true;
         }
         return false;
     }
@@ -53,21 +62,24 @@ public class MyHashMap<K, V> implements Map<K, V> {
     @Override
     public V get(Object key) {
         for(MyEntry<K, V> entry : array){
-            if(entry.getKey() == (K) key)
-                return entry.getValue();
+            if(entry != null)
+                if(entry.getKey().equals((K) key))
+                    return entry.getValue();
         }
         return null;
     }
 
     @Override
     public V put(K key, V value) {
-        for(MyEntry<K, V> entry : array){
-            if(entry.getKey() == (K) key)
-            {
-                entry.setValue(value);
-                return value;
+        if(this.array.length != 0)
+            for(MyEntry<K, V> entry : array){
+                if(entry != null)
+                    if(entry.getKey() == (K) key)
+                    {
+                        entry.setValue(value);
+                        return value;
+                    }
             }
-        }
         MyEntry<K, V>[] array = new MyEntry[this.array.length+1];
         for(int i=0;i<this.array.length;i++)
             array[i] = this.array[i];
@@ -78,10 +90,10 @@ public class MyHashMap<K, V> implements Map<K, V> {
 
     @Override
     public V remove(Object key) {
-        for(MyEntry<K, V> entry: this.array){
-            if(entry.getKey() == (K) key){
-                V value = entry.getValue();
-                entry = null;
+        for(int i=0;i<size();i++){
+            if(this.array[i].getKey().equals((K) key)){
+                V value = this.array[i].getValue();
+                this.array[i] = null;
                 resize(this.array);
                 return value;
             }
