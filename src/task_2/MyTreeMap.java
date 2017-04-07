@@ -53,4 +53,43 @@ public class MyTreeMap<K extends Comparable<K>, V> {
         }
         return null;
     }
+    public Node<K, V> remove(K key){
+        Node<K, V> x = this.root, y = null;
+        while (x != null){
+            int cmp = x.getKey().compareTo(key);
+            if(cmp == 0)
+                break;
+            y = x;
+            if(cmp < 0)
+                x = x.getLeft();
+            else
+                x = x.getRight();
+        }
+        if(x == null)
+            return null;
+        if(x.getRight() == null){
+            if(y == null)
+                this.root = x.getLeft();
+            else {
+                if(x == y.getLeft())
+                    y.setLeft(x.getLeft());
+                else
+                    y.setRight(x.getLeft());
+            }
+        }else{
+            Node<K, V> tmp = x.getRight();
+            y = null;
+            while (tmp.getLeft() != null){
+                y = tmp;
+                tmp = tmp.getLeft();
+            }
+            if(y == null){
+                x.setRight(tmp.getRight());
+            }else
+                y.setLeft(tmp.getRight());
+            x.setKey(tmp.getKey());
+            x.setValue(tmp.getValue());
+        }
+        return x;
+    }
 }
